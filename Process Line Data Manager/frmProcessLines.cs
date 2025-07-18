@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using P4DHelperClass;
-using System.Data.SqlClient;
+using P4DHelperClass = Plant4D;
 
 namespace Process_Line_Data_Manager
 {
@@ -21,7 +18,7 @@ namespace Process_Line_Data_Manager
         private bool MDCEnable = false;
 
         //Variables to hold the data when the form is called.
-        private readonly Plant4DServer ActiveServer = new Plant4DServer();
+        private readonly P4DHelperClass.Plant4DServer ActiveServer = new P4DHelperClass.Plant4DServer();
         private readonly P4DProject ActiveProject = new P4DProject();
 
         //Variables related to the data that I am going to test going forward:
@@ -65,7 +62,7 @@ namespace Process_Line_Data_Manager
             CancelPipe
         }
 
-        public frmProcessLines(Plant4DServer projectserver, P4DProject project)
+        public frmProcessLines(P4DHelperClass.Plant4DServer projectserver, P4DProject project)
         {
             InitializeComponent();
 
@@ -157,7 +154,7 @@ namespace Process_Line_Data_Manager
             foreach (Control c in gbSegment.Controls)
             {
                 //if ((c.GetType() == typeof(TextBox)) && (c.Tag.ToString() != "HRUParentID" && (c.Tag.ToString() != "ExcelParentID")))
-                if((c.GetType() == typeof(TextBox)) && !(string.IsNullOrEmpty(c.Tag.ToString())))
+                if ((c.GetType() == typeof(TextBox)) && !(string.IsNullOrEmpty(c.Tag.ToString())))
                 {
                     switch (c.Tag.ToString().ToLower())
                     {
@@ -188,9 +185,9 @@ namespace Process_Line_Data_Manager
                             else c.Text = "Disabled";
                             break;
                     }
-                    
+
                 }
-                else if(c.GetType() == typeof(ComboBox))
+                else if (c.GetType() == typeof(ComboBox))
                 {
                     if (dsPipeLine.Tables[Segment.SEGMENTTABLENAME].Columns.Contains(c.Tag.ToString()))
                     {
@@ -198,7 +195,7 @@ namespace Process_Line_Data_Manager
                     }
                 }
                 //IsTubing checkbox should only get enabled/disabled if the project has the column. otherwise, notify the user with a tooltip and disable the control.
-                else if(c.GetType() == typeof(CheckBox) && (c.Tag.ToString() == "IsTubing"))
+                else if (c.GetType() == typeof(CheckBox) && (c.Tag.ToString() == "IsTubing"))
                 {
                     if (dsPipeLine.Tables[Segment.SEGMENTTABLENAME].Columns.Contains(c.Tag.ToString()))
                     {
@@ -214,7 +211,7 @@ namespace Process_Line_Data_Manager
         private void BindSegmentDetailsControls()
         {
             bool founddescrepancy = false;
-            
+
             foreach (Control c in gbSegment.Controls)
             {
                 try
@@ -225,8 +222,8 @@ namespace Process_Line_Data_Manager
                         c.DataBindings.Clear();
 
                         //Only bind the control if the column with the name of the Tag exists:
-                        if(dsPipeLine.Tables[Segment.SEGMENTTABLENAME].Columns.Contains(c.Tag.ToString()))
-                        { 
+                        if (dsPipeLine.Tables[Segment.SEGMENTTABLENAME].Columns.Contains(c.Tag.ToString()))
+                        {
                             Binding testBinding = c.DataBindings.Add("Text", bsSegments, c.Tag.ToString(), true);
                             testBinding.DataSourceNullValue = DBNull.Value;
                             testBinding.NullValue = "";
@@ -237,7 +234,7 @@ namespace Process_Line_Data_Manager
                         }
                     }
                     //This portion is for the ComboBoxes that have tag values:
-                    else if(c.GetType() == typeof(ComboBox) && (!(c.Tag == null)))
+                    else if (c.GetType() == typeof(ComboBox) && (!(c.Tag == null)))
                     {
                         c.DataBindings.Clear();
 
@@ -255,7 +252,7 @@ namespace Process_Line_Data_Manager
                         }
                     }
                     //And now CheckBoxes that have Tag values:
-                    else if(c.GetType() == typeof(CheckBox) && (!(c.Tag == null)))
+                    else if (c.GetType() == typeof(CheckBox) && (!(c.Tag == null)))
                     {
                         c.DataBindings.Clear();
 
@@ -271,16 +268,16 @@ namespace Process_Line_Data_Manager
                         {
                             c.Enabled = false;
                         }
-                    
+
                     }
                 }
                 catch (Exception)
                 {
-                    if(c.Name == "chkIsTubing")
+                    if (c.Name == "chkIsTubing")
                     {
                         MessageBox.Show("Project may not be set up for 'IsTubing' functionality. Contact CAE if this is required. The checkbox will function within the form but will have no effect on the selected segments and will not be saved.");
                     }
-                    else if(founddescrepancy == false)
+                    else if (founddescrepancy == false)
                     {
                         founddescrepancy = true;
                         MessageBox.Show($"Could not bind one or more data fields to the dialog. Further errors will be suppressed.");
@@ -313,7 +310,7 @@ namespace Process_Line_Data_Manager
             {
                 MessageBox.Show("Error filling pipe line data set:" + ex.Message);
             }
-            
+
             //Open a connection and fill the DataSet for Segments
             try
             {
@@ -328,13 +325,13 @@ namespace Process_Line_Data_Manager
                 //The default value doesn't come across with FillSchema so it gets set here instead. Now there shouldn't be any issues when .NewRow() or .AddRow(myRow) is used.
                 DataColumnCollection columns = ds.Tables[Segment.SEGMENTTABLENAME].Columns;
                 //Also, the column might not exist, so check for it before trying to set the default.
-                if(columns.Contains("IsTubing"))
+                if (columns.Contains("IsTubing"))
                 {
                     ds.Tables[Segment.SEGMENTTABLENAME].Columns["IsTubing"].DefaultValue = 0;
                 }
 
                 //Check if project has MDC enabled:
-                if(columns.Contains(Segment.MDCPRESSURE_TESTCOLUMNNAME))
+                if (columns.Contains(Segment.MDCPRESSURE_TESTCOLUMNNAME))
                 {
                     MDCEnable = true;
                 }
@@ -420,7 +417,7 @@ namespace Process_Line_Data_Manager
             //Code Jurisdiction
             FillLookupTable(ds, CODEJURISDICTIONTABLENAME, CODEJURISDICTIONFIELDNAME);
             //Diameter
-            FillLookupTable(ds, DIAMETERTABLENAME, $"{ DIAMETERFIELDNAME},{DIAMETERTRANSLATIONFIELDNAME}", DIAMETERTRANSLATIONFIELDNAME);
+            FillLookupTable(ds, DIAMETERTABLENAME, $"{DIAMETERFIELDNAME},{DIAMETERTRANSLATIONFIELDNAME}", DIAMETERTRANSLATIONFIELDNAME);
             //Schedule
             FillLookupTable(ds, SCHEDULETABLENAME, SCHEDULEFIELDNAME);
 
@@ -448,10 +445,10 @@ namespace Process_Line_Data_Manager
             switch (OptionalOrderBy)
             {
                 case "":
-                    query += $"{ FieldName}";
+                    query += $"{FieldName}";
                     break;
                 default:
-                    query += $"{ OptionalOrderBy}";
+                    query += $"{OptionalOrderBy}";
                     break;
             }
             comm = new SqlCommand();
@@ -560,13 +557,13 @@ namespace Process_Line_Data_Manager
             switch (action)
             {
                 //case SegmentActions.Delete:
-                    //default action
+                //default action
                 //case SegmentActions.New:
-                    //default action
+                //default action
                 //case SegmentActions.Save:
-                    //default action
+                //default action
                 //case SegmentAction.Cancel:
-                    //default action
+                //default action
                 case FormActions.EditSegment:
                     SegmentTextBoxesEnabled(true);
                     btnNewSegment.Enabled = false;
@@ -664,7 +661,7 @@ namespace Process_Line_Data_Manager
                     daPipeLine.InsertCommand.Parameters["@EXCELID"].Value = excelid;
                     daPipeLine.Update(dsPipeLine);
                     identifier = daPipeLine.InsertCommand.Parameters["@ID"].Value.ToString();
-                    
+
                     daSegment.SelectCommand.Connection = conn;
                     daSegment.Fill(dsPipeLine.Tables[Segment.SEGMENTTABLENAME]);
 
@@ -674,7 +671,7 @@ namespace Process_Line_Data_Manager
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error adding new pipe line: "+ex.Message);
+                MessageBox.Show("Error adding new pipe line: " + ex.Message);
             }
 
             //Search through the list and select the pipeline we just added, which will also filter and select the new segment:
@@ -930,7 +927,7 @@ namespace Process_Line_Data_Manager
                                 SetSegmentDataFromThermal(selectedLineId);
                             }
                         }
-                    } 
+                    }
                 }
                 else
                 {
@@ -1064,7 +1061,7 @@ namespace Process_Line_Data_Manager
 
             //If the txtThicknessCaseTemperature or txtThicknessCasePressure controls have no value, set it to that of the corresponding Pressure or Temperature control:
             //(but only if the controls are active!)
-            if(MDCEnable)
+            if (MDCEnable)
             {
                 if (string.IsNullOrEmpty(txtThicknessCaseTemperature.Text.ToString()) && !(string.IsNullOrEmpty(txtTemperature.Text.ToString())))
                 {
@@ -1366,7 +1363,7 @@ namespace Process_Line_Data_Manager
                                 SetSegmentDataFromExcel(selectedLineId);
                             }
                         }
-                    } 
+                    }
                 }
                 else
                 {
@@ -1382,7 +1379,7 @@ namespace Process_Line_Data_Manager
 
         private void btnClearThermal_Click(object sender, EventArgs e)
         {
-            if(txtHRUParentID.Text != "")
+            if (txtHRUParentID.Text != "")
             {
                 txtHRUParentID.Text = "";
             }

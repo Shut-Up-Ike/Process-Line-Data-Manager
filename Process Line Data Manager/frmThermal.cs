@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using LDMClassLibrary;
+using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-using P4DHelperClass;
-using LDMClassLibrary;
+using P4DHelperClass = Plant4D;
 
 namespace Process_Line_Data_Manager
 {
@@ -96,7 +92,7 @@ namespace Process_Line_Data_Manager
             dgvHRUData.Size = myDGVSize;
             dgvP4DData.Size = myDGVSize;
             dgvCombinedData.Size = myDGVSize;
-            
+
             //Set up tabs
             tabPage1.Text = "Latest HRU Data";
             tabPage2.Text = "Existing P4D Data";
@@ -385,7 +381,7 @@ namespace Process_Line_Data_Manager
                 DataTable dtHRU = DataHolder.HRUData.Copy();
                 //...Same for the P4D data:
                 DataTable dtP4D = DataHolder.P4DData.Copy();
-                
+
                 ds.Tables.Add(dtHRU);
                 ds.Tables.Add(dtP4D);
 
@@ -397,7 +393,7 @@ namespace Process_Line_Data_Manager
                 throw ex;
             }
         }
-        
+
 
         /// <summary>
         /// Handles click event for button btnImportToP4D. Calls CreateTableHRUData and WriteHRUtoP4D.
@@ -504,7 +500,7 @@ namespace Process_Line_Data_Manager
                             break;
                     }
                     //Since the rows SHOULDN'T be deleted, they will be kept and changed to have a description of "deleted" instead.
-                    if(dr.Row["description"].ToString().ToLower() == "deleted")
+                    if (dr.Row["description"].ToString().ToLower() == "deleted")
                     {
                         row.DefaultCellStyle.BackColor = Color.Red;
                     }

@@ -18,9 +18,9 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>E:\MSTATION_CONFIG\Installation\LDM\</PublishUrl>
+    <PublishUrl>D:\Code\Published\LDM\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Unc</InstallFrom>
+    <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -28,7 +28,6 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>\\corp.loc\corpdata\NE-DATA\NE-DFT-PROJECTS\MSTATION_CONFIG\Installation\LDM\</InstallUrl>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.2.1.%2a</ApplicationVersion>
@@ -67,20 +66,26 @@
     <ManifestKeyFile>Process Line Data Manager_4_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HRUInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>X:\CAE\Libraries\HRUInterface.dll</HintPath>
     </Reference>
-    <Reference Include="P4DHelperClass, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6d99547201aa8bb6, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>X:\CAE\Libraries\P4DHelperClass.dll</HintPath>
+    <Reference Include="Plant4D">
+      <HintPath>..\..\Plant4D\Plant4D\bin\Release\Plant4D.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -201,6 +206,7 @@
     <None Include="Process Line Data Manager_3_TemporaryKey.pfx" />
     <None Include="Process Line Data Manager_4_TemporaryKey.pfx" />
     <None Include="Process Line Data Manager_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

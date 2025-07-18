@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using P4DHelperClass = Plant4D;
 
 
 namespace Process_Line_Data_Manager
@@ -61,7 +59,7 @@ namespace Process_Line_Data_Manager
         }
 
         public static void AssignP4DProject(string selectedProjDBName)
-        {            
+        {
             var result = P4DProjects.Find(delegate (P4DProject p) { return p.DbName == selectedProjDBName; });
             SelectedProject = result;
         }
@@ -75,6 +73,6 @@ namespace Process_Line_Data_Manager
             SelectedProject = new P4DProject();
         }
 
-        public DataHolder(){}
+        public DataHolder() { }
     }
 }

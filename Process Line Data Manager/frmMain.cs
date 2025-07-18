@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using P4DHelperClass = Plant4D;
 
 namespace Process_Line_Data_Manager
 {
@@ -243,7 +241,7 @@ namespace Process_Line_Data_Manager
                 DataTable scheduleMapping = FillDataTableFromProject(qry);
                 //2. Update HRU table ("holder") with P4D's schedule values by joining to the mapping table via linq and SetField:
                 holder.AsEnumerable().Join(scheduleMapping.AsEnumerable(), tblhru => tblhru["PipeThicknessDisplay"],
-                                                                            tblsch => tblsch["AliasSchedule"], 
+                                                                            tblsch => tblsch["AliasSchedule"],
                                                                             (tblhru, tblsch) => new { tblhru, tblsch })
                     .ToList().ForEach(o => o.tblhru.SetField("PipeThicknessDisplay", o.tblsch["P4DSchedule"].ToString()));
 
@@ -282,9 +280,9 @@ namespace Process_Line_Data_Manager
         private bool DoesTableExistInP4DProject(string tablename, string dbname, string servertype, string p4dtype)
         {
             bool exists = false;
-            
+
             string selectSQL = @"IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = @DbName AND TABLE_NAME = @TableName) SELECT 1 ELSE SELECT 0";
-            
+
             using (var con = P4DHelperClass.Plant4D.GetProjectConnection(dbname, servertype, p4dtype))
             {
                 using (SqlCommand cmd = new SqlCommand(selectSQL, con))
@@ -395,7 +393,7 @@ namespace Process_Line_Data_Manager
                             {
                                 chkNewHRUData.Checked = true;
                                 btnViewHRU.Enabled = true;
-                            } 
+                            }
                         }
                         else if (DataHolder.HRUData.Rows.Count > 0 && DataHolder.P4DData.Rows.Count == 0)
                         {
@@ -491,7 +489,7 @@ namespace Process_Line_Data_Manager
                 }
                 else
                 {
-                    MessageBox.Show($"Error loading data from HRU database. \n\n***HRU functionality will be disabled*** \nError Message: {ex.Message}"); 
+                    MessageBox.Show($"Error loading data from HRU database. \n\n***HRU functionality will be disabled*** \nError Message: {ex.Message}");
                 }
                 toolStripStatusLabel1.Text = "Error loading data from HRU database. HRU functionality disabled.";
             }
@@ -520,13 +518,13 @@ namespace Process_Line_Data_Manager
                 btnImportFromExcel.Enabled = true;
                 toolStripStatusLabel1.Text = "Project loaded.";
             }
-            else if(chkHRUData.Checked == false && chkP4DData.Checked && chkIsComparable.Checked && toolStripStatusLabel1.Text == "No HRU data was found")
+            else if (chkHRUData.Checked == false && chkP4DData.Checked && chkIsComparable.Checked && toolStripStatusLabel1.Text == "No HRU data was found")
             {
                 btnProcessLines.Enabled = true;
                 btnImportFromExcel.Enabled = true;
                 toolStripStatusLabel1.Text = "Project loaded.";
             }
-            else if(chkHRUData.Checked == false && chkP4DData.Checked == true)
+            else if (chkHRUData.Checked == false && chkP4DData.Checked == true)
             {
                 btnProcessLines.Enabled = true;
                 btnImportFromExcel.Enabled = true;
@@ -586,7 +584,7 @@ namespace Process_Line_Data_Manager
                 btnViewHRU.Enabled = true;
             else btnViewHRU.Enabled = false;
         }
-        
+
 
         private void BtnProcessLines_Click(object sender, EventArgs e)
         {
