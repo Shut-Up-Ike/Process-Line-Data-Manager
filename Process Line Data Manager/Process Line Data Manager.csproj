@@ -201,11 +201,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="MapperFiles\MapperFiles_ClassDiagram.cd" />
-    <None Include="Process Line Data Manager_1_TemporaryKey.pfx" />
-    <None Include="Process Line Data Manager_2_TemporaryKey.pfx" />
-    <None Include="Process Line Data Manager_3_TemporaryKey.pfx" />
-    <None Include="Process Line Data Manager_4_TemporaryKey.pfx" />
-    <None Include="Process Line Data Manager_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
